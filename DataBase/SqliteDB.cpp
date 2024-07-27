@@ -274,7 +274,11 @@ vector<shared_ptr<PLANT::BiomassPipeRun>> DATABASE::SqliteDB::GetBiomassPipeRuns
 				outletHead_m = sqlite3_column_double(statement, 3);
 				bioCmps = GetBioCmps(namePipeRun);
 				
-				vec.push_back(make_shared<PLANT::BiomassPipeRun>(namePipeRun, bioCmps, inletHead_m, outletHead_m));
+				if(namePipeRun.compare("Pre Buffer Tank to Pre Tank Liquid Biomass") == 0)
+					vec.push_back(make_shared<PLANT::BioPipeRunSimple>(namePipeRun, bioCmps, inletHead_m, outletHead_m));
+				else
+					vec.push_back(make_shared<PLANT::BiomassPipeRun>(namePipeRun, bioCmps, inletHead_m, outletHead_m));
+					
 			}
 			else
 				break;
