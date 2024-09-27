@@ -104,12 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\sbpdk\SoftwareProjects\BioDB\DataBase;..\..\EXCEL\EXCEL\EXCEL;..\..\PipeNetwork\BiomassSystem;..\..\PipeNetwork\Circuit;..\..\DB_Bio\DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\BioDB\DataBase;..\..\EXCEL\EXCEL\EXCEL;..\..\PipeNetwork\BiomassSystem;..\..\PipeNetwork\Circuit;..\..\DB_Bio\DataBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\sbpdk\SoftwareProjects\BioDB\x64\Debug;..\..\CoolProp\Debug;..\..\HTRI\x64\Debug;..\..\Juice\x64\Debug;..\..\PHE\PHE\x64\Debug;..\..\HeatExchanger\x64\Debug;..\..\MediaData\MediaData\x64\Debug;..\..\math\Math\x64\Debug;..\..\EXCEL\EXCEL\x64\Debug;..\..\PipeNetwork\x64\Debug;..\..\sqlite3\x64\Debug;..\..\DB_Bio\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\BioDB\x64\Debug;..\..\CoolProp\Debug;..\..\HTRI\x64\Debug;..\..\Juice\x64\Debug;..\..\PHE\PHE\x64\Debug;..\..\HeatExchanger\x64\Debug;..\..\MediaData\MediaData\x64\Debug;..\..\math\Math\x64\Debug;..\..\EXCEL\EXCEL\x64\Debug;..\..\PipeNetwork\x64\Debug;..\..\sqlite3\x64\Debug;..\..\DB_Bio\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Database.lib;sqlite3.lib;biomassSystem.lib;BioHexSetup.lib;hexmedia.lib;nist.lib;brine.lib;sugarsolution.lib;coolpropd.lib;circuit.lib;alglib.lib;htri_flash.lib;heatexchanger.lib;trendlines.lib;excel.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

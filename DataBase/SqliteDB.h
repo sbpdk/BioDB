@@ -49,6 +49,7 @@ namespace DATABASE
 
 
 		int InsertRor(string pk, string type, int Dim, double Dia, double s) const;
+		int UpdateRor(string pk, string type, int Dim, double Dia, double s) const; //Ikke afprøvet
 		pair<string, int> GetRor(string pk) const;
 		pair<int, double> GetPK_Ror(string type, int Dim) const;
 		pair<int, double> GetPK_Ror_(int pk) const;
@@ -59,6 +60,7 @@ namespace DATABASE
 		shared_ptr<CIRCUIT::BiomassCmp> GetBioCmps(string bioPipeRun) const;
 		vector<shared_ptr<CIRCUIT::BiomassCmp>> GetBioCmps2(string bioPipeRun) const;
 		int UpdateBioCmpRef(string project, shared_ptr<CIRCUIT::BiomassCmp> pipe, shared_ptr<CIRCUIT::BiomassCmp> inlet, shared_ptr<CIRCUIT::BiomassCmp> outlet) const;
+		int UpdateBioCmp(string project, shared_ptr<CIRCUIT::BiomassCmp> pipe) const;
 
 
 		/*shared_ptr<PLANT::BiomassPipeRun> GetPipeRunComponents(int key);

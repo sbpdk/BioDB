@@ -465,6 +465,22 @@ void GetCompleteProject()
 }
 
 
+void UpDatePipeInPipeRun()
+{
+    DATABASE::SqliteDB sql("BioDB.db");
+    vector<shared_ptr<PLANT::BiomassPipeRun>> runs = sql.GetBiomassPipeRuns("Project Upgrade");
+    shared_ptr<CIRCUIT::BiomassCmp> cmp = runs.at(0)->GetBioComponents();
+    shared_ptr<CIRCUIT::PipeRunBiomass> pR = dynamic_pointer_cast<CIRCUIT::PipeRunBiomass>(cmp);
+    cout << pR->GetLength() << endl;
+    pR->SetLength(150.0);
+    sql.UpdateBioCmp("Project Upgrade", cmp);
+    runs = sql.GetBiomassPipeRuns("Project Upgrade");
+    cmp = runs.at(0)->GetBioComponents();
+    pR = dynamic_pointer_cast<CIRCUIT::PipeRunBiomass>(cmp);
+    cout << pR->GetLength() << endl;
+}
+
+
 
 int main()
 {
@@ -476,7 +492,7 @@ int main()
     //InsertTubes4();
     //InsertTubes5();
     //InsertPipeRuns();
-    LookAtDB();    
+    //LookAtDB();    
     //
     //ReadData();
 
@@ -489,6 +505,8 @@ int main()
 
     //GetCompleteProject();
 
+
+    UpDatePipeInPipeRun();
     std::cout << "Finish!\n";
 }
 

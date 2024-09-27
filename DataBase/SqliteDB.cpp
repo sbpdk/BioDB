@@ -121,6 +121,29 @@ int DATABASE::SqliteDB::InsertRor(string pk, string type, int Dim, double Dia, d
 }
 
 
+int DATABASE::SqliteDB::UpdateRor(string pk, string type, int Dim, double Dia, double s) const
+{
+	sqlite3_stmt* statement;
+	
+	const char* sql = "UPDATE Ror SET type = ?, Dim = ?, Dia = ?, s = ? WHERE pk = ?";
+
+	if (sqlite3_prepare_v2(database, sql, -1, &statement, 0) == SQLITE_OK)
+	{		
+		sqlite3_bind_text(statement, 1, pk.c_str(), strlen(pk.c_str()), 0);
+		sqlite3_bind_text(statement, 2, type.c_str(), strlen(type.c_str()), 0);
+		sqlite3_bind_int(statement, 3, Dim);
+		sqlite3_bind_double(statement, 4, Dia);
+		sqlite3_bind_double(statement, 5, s);
+
+		sqlite3_step(statement);
+	}
+	else
+		return -1;
+
+	sqlite3_finalize(statement);	
+}
+
+
 pair<string, int> DATABASE::SqliteDB::GetRor(string pk) const
 {
 	sqlite3_stmt* statement;
@@ -433,20 +456,20 @@ shared_ptr<CIRCUIT::BiomassCmp> DATABASE::SqliteDB::GetBioCmps(string bioPipeRun
 				if (function.compare("Pipe") == 0)
 				{
 					pair<string, int> pipeDim = GetRor(ror);
-					vec.push_back(make_shared<CIRCUIT::PipeRunBiomass>(tag, pipeDim.first, pipeDim.second, 0.05e-3, length, elbow45, elbow90, 0, 0, nullptr));
+					vec.push_back(make_shared<CIRCUIT::PipeRunBiomass>(pk, tag, pipeDim.first, pipeDim.second, 0.05e-3, length, elbow45, elbow90, 0, 0, nullptr));
 				}
 				else if (function.compare("Flow meter") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioFlowMeter>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioFlowMeter>(pk, tag, description, nullptr));
 				else if (function.compare("HEX") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioHEX>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioHEX>(pk, tag, description, nullptr));
 				else if (function.compare("Macerator") == 0)
-					vec.push_back(make_shared<CIRCUIT::Macerator>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::Macerator>(pk, tag, description, nullptr));
 				else if (function.compare("Mixer") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioMixer>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioMixer>(pk, tag, description, nullptr));
 				else if (function.compare("Pump") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioPump>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioPump>(pk, tag, description, nullptr));
 				else if (function.compare("Screwpress") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioPump>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioPump>(pk, tag, description, nullptr));
 								
 				refs.push_back(Ref(pk, inlet, outlet));
 			}
@@ -529,20 +552,20 @@ vector<shared_ptr<CIRCUIT::BiomassCmp>> DATABASE::SqliteDB::GetBioCmps2(string b
 				if (function.compare("Pipe") == 0)
 				{
 					pair<string, int> pipeDim = GetRor(ror);
-					vec.push_back(make_shared<CIRCUIT::PipeRunBiomass>(tag, pipeDim.first, pipeDim.second, 0.05e-3, length, elbow45, elbow90, 0, 0, nullptr));
+					vec.push_back(make_shared<CIRCUIT::PipeRunBiomass>(pk, tag, pipeDim.first, pipeDim.second, 0.05e-3, length, elbow45, elbow90, 0, 0, nullptr));
 				}
 				else if (function.compare("Flow meter") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioFlowMeter>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioFlowMeter>(pk, tag, description, nullptr));
 				else if (function.compare("HEX") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioHEX>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioHEX>(pk, tag, description, nullptr));
 				else if (function.compare("Macerator") == 0)
-					vec.push_back(make_shared<CIRCUIT::Macerator>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::Macerator>(pk, tag, description, nullptr));
 				else if (function.compare("Mixer") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioMixer>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioMixer>(pk, tag, description, nullptr));
 				else if (function.compare("Pump") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioPump>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioPump>(pk, tag, description, nullptr));
 				else if (function.compare("Screwpress") == 0)
-					vec.push_back(make_shared<CIRCUIT::BioPump>(tag, description, nullptr));
+					vec.push_back(make_shared<CIRCUIT::BioPump>(pk, tag, description, nullptr));
 				
 				refs.push_back(Ref(pk, inlet, outlet));
 			}
@@ -577,6 +600,74 @@ vector<shared_ptr<CIRCUIT::BiomassCmp>> DATABASE::SqliteDB::GetBioCmps2(string b
 }
 
 
+
+/*SKAL LAVES OM*/
+int DATABASE::SqliteDB::UpdateBioCmp(string project, shared_ptr<CIRCUIT::BiomassCmp> pipe) const
+{
+	sqlite3_stmt* statement;
+	
+	const char* sql = "UPDATE BioComponent SET tag = ?, function = ?, description = ?, length = ?, elbow90 = ?, elbow45 = ?, ror = ? WHERE pk = ?";
+
+	if (sqlite3_prepare_v2(database, sql, -1, &statement, 0) == SQLITE_OK)
+	{
+		string pk = project + "_" + pipe->GetTag();
+		string tag = pipe->GetTag();		
+		string description = pipe->GetType();
+		string function;
+		double length = 0;
+		int elbow90 = 0;
+		int elbow45 = 0;
+		string ror = "";
+
+		switch (pipe->GetFunctionType())
+		{
+		case CIRCUIT::BiomassCmpType::hex:
+			function = "HEX";
+			break;
+		case CIRCUIT::BiomassCmpType::macerator:
+			function = "Macerator";
+			break;
+		case CIRCUIT::BiomassCmpType::flowmeter:
+			function = "Flow meter";
+			break;
+		case CIRCUIT::BiomassCmpType::mixer:
+			function = "Mixer";
+			break;
+		case CIRCUIT::BiomassCmpType::pipe:
+		{
+			function = "Pipe";
+			shared_ptr<CIRCUIT::PipeRunBiomass> pR = dynamic_pointer_cast<CIRCUIT::PipeRunBiomass>(pipe);
+			length = pR->GetLength();
+			elbow90 = pR->GetElbow90();
+			elbow45 = pR->GetElbow45();
+			ror = pR->GetType() + "_" + to_string(pR->GetDimension());
+			break;
+		}
+		case CIRCUIT::BiomassCmpType::pump:
+			function = "Pump";
+			break;
+		case CIRCUIT::BiomassCmpType::screwpress:
+			function = "Screwpress";
+			break;		
+		}			
+		
+		sqlite3_bind_text(statement, 8, pk.c_str(), strlen(pk.c_str()), 0);
+		sqlite3_bind_text(statement, 1, tag.c_str(), strlen(tag.c_str()), 0);
+		sqlite3_bind_text(statement, 2, function.c_str(), strlen(function.c_str()), 0);
+		sqlite3_bind_text(statement, 3, description.c_str(), strlen(description.c_str()), 0);
+		sqlite3_bind_double(statement, 4, length);
+		sqlite3_bind_int(statement, 5, elbow90);
+		sqlite3_bind_int(statement, 6, elbow45);
+		sqlite3_bind_text(statement, 7, ror.c_str(), strlen(ror.c_str()), 0);					
+		
+		sqlite3_step(statement);
+	}
+	else
+		return -1;
+
+	sqlite3_finalize(statement);	
+
+}
 
 
 
