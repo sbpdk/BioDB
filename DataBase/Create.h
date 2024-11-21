@@ -14,6 +14,9 @@ public:
 	/*Used to create new database 2024*/
 	Create(int vv, int xx);
 
+	/*Used 20 11 2024 To create picture db*/
+	void PicDB();
+
 	/*Used to test constraints*/
 	Create(int vv, int xx, int rr);
 

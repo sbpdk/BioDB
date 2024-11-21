@@ -99,8 +99,11 @@ void Create::AddTable()
 }
 
 
-
-
+void Create::PicDB()
+{
+	Database db = "Utilities.db";
+	db.Quary("CREATE TABLE IconPic (name TEXT PRIMARY KEY, size INTEGER, pict BLOB)");
+}
 
 
 

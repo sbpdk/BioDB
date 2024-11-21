@@ -27,9 +27,6 @@
     <ClCompile Include="Database_.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SqliteDB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Create.h">
@@ -45,9 +42,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Database_.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SqliteDB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
